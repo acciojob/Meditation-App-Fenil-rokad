@@ -1,17 +1,16 @@
-/*  your css code here. If applicable */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial;
+  font-family: sans-serif;
   overflow: hidden;
   background: #000;
   color: white;
 }
 
-#app {
-  position: relative;
+.app {
   height: 100vh;
   width: 100vw;
+  position: relative;
 }
 
 .vid-container video {
@@ -26,17 +25,13 @@ body, html {
 
 .player-container {
   position: absolute;
-  bottom: 50px;
+  bottom: 40px;
   width: 100%;
   text-align: center;
 }
 
-.sound-picker, #time-select {
-  margin: 10px 0;
-}
-
 .sound-picker button,
-#time-select button,
+.time-select button,
 .play {
   padding: 10px 20px;
   margin: 5px;
