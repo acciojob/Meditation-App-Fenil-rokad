@@ -8,6 +8,33 @@
 
 <body>
 	<!-- the entire body must be written by student -->
+	 <div id="app">
+    <!-- Video container -->
+    <div class="vid-container">
+      <video loop muted class="video" id="bgVideo">
+        <source src="./Sounds/beach.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Audio and control container -->
+    <div class="player-container">
+      <audio id="medAudio" src="./Sounds/beach.mp3"></audio>
+
+      <div class="sound-picker">
+        <button data-sound="beach" data-video="beach">Beach</button>
+        <button data-sound="rain" data-video="rain">Rain</button>
+      </div>
+
+      <div id="time-select">
+        <button id="smaller-mins">2 Minutes</button>
+        <button id="medium-mins">5 Minutes</button>
+        <button id="long-mins">10 Minutes</button>
+      </div>
+
+      <button class="play">Play</button>
+      <div class="time-display">10:0</div>
+    </div>
+  </div>
     <script type="text/javascript" src="./script.js">
 </script>
 
