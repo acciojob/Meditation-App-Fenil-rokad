@@ -1,90 +1,129 @@
-const audio = document.querySelector(".player-container audio");
-const video = document.querySelector(".vid-container video");
-const playButton = document.querySelector(".play");
-const timeDisplay = document.querySelector(".time-display");
-const timeButtons = document.querySelectorAll("#time-select button");
-const soundButtons = document.querySelectorAll(".sound-picker button");
+// DOM Elements
+const timeDisplay = document.querySelector('.time-display');
+const playBtn = document.querySelector('.play');
+const timeSelectBtns = document.querySelectorAll('#time-select button');
+const soundPickerBtns = document.querySelectorAll('.sound-picker button');
+const video = document.getElementById('video');
 
-let duration = 600; // default 10 mins
-let currentTime = 0;
-let timer;
+// Audio
+const beachSound = new Audio('Sounds/beach.mp3');
+const rainSound = new Audio('Sounds/rain.mp3');
+let currentSound = beachSound;
+
+// Time variables
+let totalTime = 600; // 10 minutes in seconds
+let timeRemaining = totalTime;
 let isPlaying = false;
+let timer;
 
-audio.muted = true; // prevent autoplay block
+// Initialize
+updateTimeDisplay();
+beachSound.loop = true;
+rainSound.loop = true;
 
-function updateTimeDisplay(seconds) {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  timeDisplay.textContent = `${mins}:${secs}`; // match "10:0" not "10:00"
+// Event Listeners
+playBtn.addEventListener('click', togglePlay);
+
+timeSelectBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class from all buttons
+        timeSelectBtns.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Set time based on button clicked
+        if (this.id === 'smaller-mins') {
+            totalTime = 120; // 2 minutes
+        } else if (this.id === 'medium-mins') {
+            totalTime = 300; // 5 minutes
+        } else if (this.id === 'long-mins') {
+            totalTime = 600; // 10 minutes
+        }
+        
+        timeRemaining = totalTime;
+        updateTimeDisplay();
+        
+        // If currently playing, restart timer with new time
+        if (isPlaying) {
+            clearInterval(timer);
+            startTimer();
+        }
+    });
+});
+
+soundPickerBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class from all buttons
+        soundPickerBtns.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Change sound and video based on selection
+        if (this.id === 'beach-sound') {
+            currentSound = beachSound;
+            video.src = 'beach.mp4';
+            rainSound.pause();
+            rainSound.currentTime = 0;
+            if (isPlaying) {
+                beachSound.play();
+            }
+        } else if (this.id === 'rain-sound') {
+            currentSound = rainSound;
+            video.src = 'rain.mp4';
+            beachSound.pause();
+            beachSound.currentTime = 0;
+            if (isPlaying) {
+                rainSound.play();
+            }
+        }
+        
+        // Reload video to apply new source
+        video.load();
+        video.play();
+    });
+});
+
+// Functions
+function togglePlay() {
+    if (isPlaying) {
+        pauseMeditation();
+    } else {
+        startMeditation();
+    }
+}
+
+function startMeditation() {
+    isPlaying = true;
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    currentSound.play();
+    startTimer();
+}
+
+function pauseMeditation() {
+    isPlaying = false;
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    currentSound.pause();
+    clearInterval(timer);
 }
 
 function startTimer() {
-  currentTime = duration;
-  updateTimeDisplay(currentTime);
-
-  timer = setInterval(() => {
-    currentTime--;
-    updateTimeDisplay(currentTime);
-
-    if (currentTime <= 0) {
-      clearInterval(timer);
-      playButton.textContent = "Play";
-      audio.pause();
-      video.pause();
-      isPlaying = false;
-    }
-  }, 1000);
+    clearInterval(timer);
+    timer = setInterval(() => {
+        timeRemaining--;
+        updateTimeDisplay();
+        
+        if (timeRemaining <= 0) {
+            clearInterval(timer);
+            pauseMeditation();
+            timeRemaining = totalTime;
+            updateTimeDisplay();
+            alert('Meditation session complete!');
+        }
+    }, 1000);
 }
 
-function stopTimer() {
-  clearInterval(timer);
+function updateTimeDisplay() {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
-
-function togglePlay() {
-  if (!isPlaying) {
-    audio.play();
-    video.play();
-    playButton.textContent = "Pause";
-    isPlaying = true;
-    startTimer();
-  } else {
-    audio.pause();
-    video.pause();
-    playButton.textContent = "Play";
-    isPlaying = false;
-    stopTimer();
-  }
-}
-
-// Time selection buttons
-timeButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    const minutes = parseInt(button.getAttribute("data-time"));
-    duration = minutes * 60;
-    updateTimeDisplay(duration);
-  });
-});
-
-// Sound switch buttons
-soundButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    const sound = button.getAttribute("data-sound");
-    const vid = button.getAttribute("data-video");
-
-    audio.src = `./Sounds/${sound}`;
-    video.src = `./Sounds/${vid}`;
-    audio.load();
-    video.load();
-
-    if (isPlaying) {
-      audio.play();
-      video.play();
-    }
-  });
-});
-
-// Play button event
-playButton.addEventListener("click", togglePlay);
-
-// Initial display
-updateTimeDisplay(duration);
