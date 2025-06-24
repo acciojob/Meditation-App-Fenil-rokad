@@ -1,7 +1,7 @@
 // DOM Elements
 const timeDisplay = document.querySelector('.time-display');
 const playBtn = document.querySelector('.play');
-const timeSelectBtns = document.querySelectorAll('#time-select button');
+const timeSelectBtns = document.querySelectorAll('.time-select button');
 const soundPickerBtns = document.querySelectorAll('.sound-picker button');
 const video = document.getElementById('video');
 
@@ -11,7 +11,7 @@ const rainSound = new Audio('Sounds/rain.mp3');
 let currentSound = beachSound;
 
 // Time variables
-let totalTime = 600; // 10 minutes in seconds
+let totalTime = 300; // Default to 5 minutes (matching active button)
 let timeRemaining = totalTime;
 let isPlaying = false;
 let timer;
@@ -31,15 +31,8 @@ timeSelectBtns.forEach(btn => {
         // Add active class to clicked button
         this.classList.add('active');
         
-        // Set time based on button clicked
-        if (this.id === 'smaller-mins') {
-            totalTime = 120; // 2 minutes
-        } else if (this.id === 'medium-mins') {
-            totalTime = 300; // 5 minutes
-        } else if (this.id === 'long-mins') {
-            totalTime = 600; // 10 minutes
-        }
-        
+        // Set time based on data attribute
+        totalTime = parseInt(this.dataset.time);
         timeRemaining = totalTime;
         updateTimeDisplay();
         
@@ -125,5 +118,5 @@ function startTimer() {
 function updateTimeDisplay() {
     const minutes = Math.floor(timeRemaining / 60);
     const seconds = timeRemaining % 60;
-    timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    timeDisplay.textContent = `${minutes}:${seconds}`;
 }

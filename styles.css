@@ -5,7 +5,7 @@
     font-family: 'Arial', sans-serif;
 }
 
-#app {
+.app {
     position: relative;
     height: 100vh;
     overflow: hidden;
@@ -35,7 +35,7 @@
 .player-container {
     background-color: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
-    padding: 30px;
+    padding: 30px 40px;
     border-radius: 15px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -45,34 +45,36 @@
 
 .time-display {
     color: white;
-    font-size: 3.5rem;
+    font-size: 50px;
     margin-bottom: 20px;
     font-weight: 300;
 }
 
-#time-select {
+.time-select {
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
 }
 
-#time-select button {
+.time-select button {
     background: none;
     border: none;
     color: white;
-    font-size: 1.2rem;
+    font-size: 16px;
     padding: 10px 15px;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
     background-color: rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-#time-select button:hover {
+.time-select button:hover {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
-#time-select button.active {
+.time-select button.active {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -80,10 +82,17 @@
     background: none;
     border: none;
     color: white;
-    font-size: 4rem;
+    font-size: 60px;
     cursor: pointer;
-    margin-bottom: 30px;
+    margin: 20px 0;
     transition: transform 0.3s ease;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    visibility: visible;
 }
 
 .play:hover {
@@ -94,6 +103,7 @@
     display: flex;
     justify-content: space-around;
     width: 100%;
+    margin-top: 20px;
 }
 
 .sound-picker button {
@@ -108,6 +118,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid white;
 }
 
 .sound-picker button img {
